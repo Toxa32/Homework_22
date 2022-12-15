@@ -8,43 +8,44 @@
 # - скорость
 # В этом примере есть сразу несколько запахов плохого кода. Исправьте их
 #   (длинный метод, длинный список параметров)
+# ----------------------------------------------------------------------
 
 
 class Unit:
-    def move(self, field, x_coord, y_coord, direction, is_fly, crawl, speed = 1):
 
-        if is_fly and crawl:
-            raise ValueError('Рожденный ползать летать не должен!')
+    def __init__(self, move_type: str, speed: int):
 
-        if is_fly:
-            speed *= 1.2
-            if direction == 'UP':
-                new_y = y_coord + speed
-                new_x = x_coord
-            elif direction == 'DOWN':
-                new_y = y_coord - speed
-                new_x = x_coord
-            elif direction == 'LEFT':
-                new_y = y_coord
-                new_x = x_coord - speed
-            elif direction == 'RIGTH':
-                new_y = y_coord
-                new_x = x_coord + speed
-        if crawl:
-            speed *= 0.5
-            if direction == 'UP':
-                new_y = y_coord + speed
-                new_x = x_coord
-            elif direction == 'DOWN':
-                new_y = y_coord - speed
-                new_x = x_coord
-            elif direction == 'LEFT':
-                new_y = y_coord
-                new_x = x_coord - speed
-            elif direction == 'RIGTH':
-                new_y = y_coord
-                new_x = x_coord + speed
+        self._pos_x = 0
+        self._pos_y = 0
+        self._move_type = move_type
+        self._speed = self._get_speed(speed)
 
-            field.set_unit(x=new_x, y=new_y, unit=self)
+    def _get_speed(self, speed: int):
+
+        if self._move_type == "FLY":
+            return speed * 1.2
+
+        elif self._move_type == "CRAWL":
+            return speed * 0.5
+
+        else:
+            raise ValueError("Unknown move type")
+
+    def move(self, direction):
+
+        if direction == 'UP':
+            self._pos_y += self._speed
+
+        elif direction == 'DOWN':
+            self._pos_y -= self._speed
+
+        elif direction == 'LEFT':
+            self._pos_x -= self._speed
+
+        elif direction == 'RIGHT':
+            self._pos_x += self._speed
+
+        else:
+            raise ValueError("Unknown direction")
 
 #     ...
